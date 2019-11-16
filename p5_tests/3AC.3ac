@@ -1,0 +1,40 @@
+[BEGIN GLOBALS]
+[END GLOBALS]
+[BEGIN f LOCALS]
+b (formal)
+a (local)
+[END f LOCALS]
+enter f
+getin 1 b
+a := b
+iffalse a goto lbl_1
+setout 1 4
+goto lbl_0
+goto lbl_2
+lbl_1: nop
+setout 1 12
+goto lbl_0
+lbl_2: nop
+lbl_0: leave f
+[BEGIN main LOCALS]
+a (local)
+b (local)
+tmp0 (tmp)
+tmp1 (tmp)
+tmp2 (tmp)
+[END main LOCALS]
+enter main
+b := a
+a := a ADD 1
+setin 1 True
+call f
+getout 1 tmp0
+tmp1 := a ADD tmp0
+a := tmp1
+tmp2 := a LT 500
+lbl_4: nop
+lbl_5: nop
+iffalse tmp2 goto lbl_5
+goto lbl_4
+lbl_3: EXIT
+

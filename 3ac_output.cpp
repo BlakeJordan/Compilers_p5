@@ -36,15 +36,12 @@ namespace lake{
 	}
 
 	void FormalDeclNode::to3AC(IRProgram * prog){
-		// cant happen in Mr, WorldWide
+		// cant happen in Mr. WorldWide
 		TODO(Implement me)
 	}
 
 	void FormalDeclNode::to3AC(Procedure * proc){
 		SemSymbol * sym = this->myID->getSymbol();
-		// if (sym == nullptr){
-		// 	throw new InternalError("null sym");
-		// }
 		proc->gatherFormal(sym);
 		//TODO(Implement me)
 	}
@@ -92,8 +89,7 @@ namespace lake{
 	}
 
 	Opd * StrLitNode::flatten(Procedure * proc){
-		Opd * res = proc->getProg()->makeString(myString);
-		return res;
+		return proc->getProg()->makeString(myString);
 	}
 
 	Opd * TrueNode::flatten(Procedure * proc){
@@ -116,7 +112,8 @@ namespace lake{
 	}
 
 	Opd * DerefNode::flatten(Procedure * proc){
-		TODO(Implement me)
+		return myTgt->flatten(proc);
+		// TODO(Implement me)
 	}
 
 	Opd * CallExpNode::flatten(Procedure * proc){
@@ -269,7 +266,7 @@ namespace lake{
 	}
 
 	void AssignStmtNode::to3AC(Procedure * proc){
-		Opd * assign = myAssign->flatten(proc);
+		myAssign->flatten(proc);
 		// TODO(Implement me)
 	}
 
@@ -302,20 +299,56 @@ namespace lake{
 	}
 
 	void IfStmtNode::to3AC(Procedure * proc){
+		myDecls->to3AC(proc);
+		myStmts->to3AC(proc);
 		Opd * boolExp = myExp->flatten(proc);
-		NopQuad * after = new NopQuad();
-		after->addLabel(proc->makeLabel());
-		JmpIfQuad 
-
+		NopQuad * end = new NopQuad();
+		Label * lbl_end = proc->makeLabel();
+		JmpIfQuad * ifQuad = new JmpIfQuad(boolExp, false, lbl_end);
+		end->addLabel(lbl_end);
+		proc->addQuad(ifQuad);
+		proc->addQuad(end);
 		// TODO(Implement me)
 	}
 
 	void IfElseStmtNode::to3AC(Procedure * proc){
-		TODO(Implement me)
+		Label * lbl_ifFalse = proc->makeLabel();
+		Quad * ifFalse = new NopQuad();
+		ifFalse->addLabel(lbl_ifFalse);
+		Label * lbl_end = proc->makeLabel();
+		Quad * end = new NopQuad();
+		end->addLabel(lbl_end);
+		Opd * boolExp = myExp->flatten(proc);
+		Quad * ifQuad = new JmpIfQuad(boolExp, false, lbl_ifFalse);
+		proc->addQuad(ifQuad);
+		myDeclsT->to3AC(proc);
+		myStmtsT->to3AC(proc);
+		Quad * elseQuad = new JmpQuad(lbl_end);
+		proc->addQuad(elseQuad);
+		proc->addQuad(ifFalse);
+		myDeclsF->to3AC(proc);
+		myStmtsF->to3AC(proc);
+		proc->addQuad(end);
+		// TODO(Implement me)
 	}
 
 	void WhileStmtNode::to3AC(Procedure * proc){
-		TODO(Implement me)
+		myDecls->to3AC(proc);
+		myStmts->to3AC(proc);
+		Opd * boolExp = myExp->flatten(proc);
+		Quad * head = new NopQuad();
+		Quad * end = new NopQuad();
+		Label * lbl_head = proc->makeLabel();
+		Label * lbl_end = proc->makeLabel();
+		Quad * ifFalseQuad = new JmpIfQuad(boolExp, false, lbl_end);
+		Quad * ifTrueQuad = new JmpQuad(lbl_head);
+		head->addLabel(lbl_head);
+		end->addLabel(lbl_end);
+		proc->addQuad(head);
+		proc->addQuad(end);
+		proc->addQuad(ifFalseQuad);
+		proc->addQuad(ifTrueQuad);
+		// TODO(Implement me)
 	}
 
 	void CallStmtNode::to3AC(Procedure * proc){
@@ -324,7 +357,17 @@ namespace lake{
 	}
 
 	void ReturnStmtNode::to3AC(Procedure * proc){
-		TODO(Implement me)
+		// if(myExp != NULL) {
+		// 	Opd * res = myExp->flatten(proc);
+		// 	Quad * setOutQuad = new SetOutQuad(1, res);
+		// 	proc->addQuad(setOutQuad);
+		// }
+		Opd * retVal = myExp->flatten(proc);
+		Quad * outQuad = new SetOutQuad(1, retVal);
+		Quad * exitJmp = new JmpQuad(proc->getLeaveLabel());
+		proc->addQuad(outQuad);
+		proc->addQuad(exitJmp);
+		// TODO(Implement me)
 	}
 
 	void VarDeclNode::to3AC(Procedure * proc){

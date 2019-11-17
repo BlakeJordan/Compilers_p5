@@ -1,42 +1,111 @@
 [BEGIN GLOBALS]
+x
+y
+str_0 "wow good job"
 [END GLOBALS]
 [BEGIN f LOCALS]
 b (formal)
+n (formal)
 a (local)
+tmp0 (tmp)
+tmp1 (tmp)
 [END f LOCALS]
 enter f
 getin 1 b
+getin 2 n
 a := b
 iffalse a goto lbl_1
-setout 1 4
+tmp0 := 4 ADD n
+setout 1 tmp0
 goto lbl_0
 goto lbl_2
 lbl_1: nop
-setout 1 12
+tmp1 := 12 SUB n
+setout 1 tmp1
 goto lbl_0
 lbl_2: nop
 lbl_0: leave f
+[BEGIN g LOCALS]
+tmp0 (tmp)
+[END g LOCALS]
+enter g
+tmp0 := x LT y
+iffalse tmp0 goto lbl_4
+WRITE x
+goto lbl_5
+lbl_4: nop
+READ y
+lbl_5: nop
+goto lbl_3
+lbl_3: leave g
+[BEGIN z LOCALS]
+[END z LOCALS]
+enter z
+goto lbl_6
+lbl_6: leave z
 [BEGIN main LOCALS]
 a (local)
 b (local)
+c (local)
 tmp0 (tmp)
 tmp1 (tmp)
 tmp2 (tmp)
 tmp3 (tmp)
+tmp4 (tmp)
+tmp5 (tmp)
+tmp6 (tmp)
+tmp7 (tmp)
+tmp8 (tmp)
+tmp9 (tmp)
+tmp10 (tmp)
+tmp11 (tmp)
+tmp12 (tmp)
+tmp13 (tmp)
+tmp14 (tmp)
+tmp15 (tmp)
+tmp16 (tmp)
 [END main LOCALS]
 enter main
 tmp0 @ b
 tmp0 := a
 a := a ADD 1
-lbl_4: nop
-tmp1 := a LT 500
-iffalse tmp1 goto lbl_5
-setin 1 1
+a := a SUB 1
+tmp1 := NEG a
+a := tmp1
+lbl_8: nop
+tmp2 := a LT 500
+iffalse tmp2 goto lbl_9
+tmp3 := 1 OR 0
+setin 1 tmp3
+setin 2 15
 call f
-getout 1 tmp2
-tmp3 := a ADD tmp2
-a := tmp3
-goto lbl_4
-lbl_5: nop
-lbl_3: EXIT
-
+getout 1 tmp4
+tmp5 := a ADD tmp4
+a := tmp5
+goto lbl_8
+lbl_9: nop
+tmp6 := y DIV 6
+tmp7 := x LTE tmp6
+c := tmp7
+tmp8 := y SUB 14
+tmp9 := x GTE tmp8
+c := tmp9
+tmp10 := y MULT 15
+tmp11 := x GT tmp10
+c := tmp11
+WRITE str_0
+tmp12 @ b
+READ tmp12
+call g
+call z
+tmp13 := NOT c
+tmp14 := 1 EQ 0
+tmp15 := 1 AND tmp14
+tmp16 := tmp13 NEQ tmp15
+iffalse tmp16 goto lbl_10
+setout 1 1
+goto lbl_7
+lbl_10: nop
+setout 1 0
+goto lbl_7
+lbl_7: EXIT

@@ -191,6 +191,17 @@ std::string GetOutQuad::repr(){
 	return res;
 }
 
+LocQuad::LocQuad(Opd * srcIn, Opd * tgtIn)
+: Quad(), src(srcIn),tgt(tgtIn) {
+
+}
+
+std::string LocQuad::repr() {
+	std::string res = "";
+	res += tgt->toString() + " @ " + src->toString(); 
+	return res;
+}
+
 SetInQuad::SetInQuad(size_t indexIn, Opd * opdIn) 
 : index(indexIn), opd(opdIn){
 }

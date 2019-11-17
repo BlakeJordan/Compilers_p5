@@ -31,18 +31,17 @@ int main() {
   @b = a;
   a++;
   a--;
-  a = -a;
+  y = 12;
+  x = 4;
   while(a < 500) {
     a = a + f(true || false, 15);
   }
   c = x <= (y/6);
   c = x >= (y-14);
   c = x > (y*15);
-  write "wow good job";
-  read @b;
   g();
   z();
-  if(!c != (true && (true == false))) {
+  if(!c == (true && false)) {
     return 1;
   }
   return 0;
